@@ -1,0 +1,133 @@
+########################################################################################################
+#                                                                                                      #
+#                                     OP Anvils Configuration File                                     #
+#                                                                                                      #
+#                                             By Varmetek                                              #
+########################################################################################################
+
+
+
+
+
+#  Should there be server mandated max levels?
+# If this is disabled, player permission Limits will be used
+#
+# When using permission limits, players will need to have a permission node which gives them
+# a personal maximum enchantment limit
+
+# An example permission for the protections enchantment is
+# opanvils.enchantment.protection_enviromental.15
+# Changing a players permission limits will require a reload of the plugin
+# This can be done with /opa reload perms
+#
+# This node allows for the player to combine the protection enchantment until level 15
+#
+# Players with the opanvils.bypass permission will not be affected by any limits;
+# It is recommended that this is true
+useGlobalLimits: true
+
+
+
+
+#The server custom enchantment limits
+# By default all of the enchantment limits are set to their vanilla limits
+# You can use the alternate names in aliases.yml here
+#
+# Values that are -1 or lower are set to default
+# Values that are set to 0 cannot be combined at all
+
+globalLimits:
+
+  #Regular Protection
+  protection: -1
+
+  #Fire protection
+  fire protection: -1
+
+  #Feather falling
+  feather falling: -1
+
+  #Blast Protection
+  blast protection: -1
+
+  #Projectile Protection
+  protectile protection: -1
+
+  #Respiration
+  respiration: -1
+
+  #Aua Affinity
+  aqua affinity: -1
+
+  #Thorns
+  THORNS: -1
+
+  #Depth Strider
+  DEPTH_STRIDER: -1
+
+  #Frost Walker
+  FROST_WALKER: -1
+
+  #Curse of Binding
+  curse of binding: -1
+
+  #Sharpness
+  sharpness: -1
+
+  #Smite
+  smite: -1
+
+  #Bane of Arthropods
+  bane of arthropods: -1
+
+  #Knockback
+  KNOCKBACK: -1
+
+  #Fire Aspect
+  FIRE_ASPECT: -1
+
+  #Looting
+  LOOTing: -1
+
+  #Sweeping Edge
+  SWEEPING_EDGE: -1
+
+  #Efficiency
+  efficiency: -1
+
+  #Silk Touch
+  SILK_TOUCH: -1
+
+  #Unbreaking
+  DURABILITY: -1
+
+  #Fortune
+  fortune: -1
+
+  #Power
+  power: -1
+
+  #Punch
+  punch: -1
+
+  #Flame
+  flame: -1
+
+  #Infinity
+  ARROW_INFINITE: -1
+
+  #Luck of the Sea
+  luck of the sea: -1
+
+  #Lure
+  LURE: -1
+
+  #Mending
+  MENDING: -1
+
+  #Curse of Vanishing
+  VANISHING_CURSE: -1
+
+
+
+

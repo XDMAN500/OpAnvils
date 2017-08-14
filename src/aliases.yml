@@ -1,0 +1,72 @@
+#
+#
+# Enchantment Aliases
+#
+# This file can be changed allow for alternate names for each enchantment.
+# I would rather type in protection than PROTECTION_ENVIROMENT when doing a command
+#
+# The default aliases are taken from the vanilla ids given from the minecraft wiki
+# You can find those here https://minecraft.gamepedia.com/Enchanting
+#
+# If you want to add your own aliases you have to get the spigot name for the enchantment.
+# This can be found here https://hub.spigotmc.org/javadocs/spigot/org/bukkit/enchantments/Enchantment.html
+#
+# If enchantment are not here that could mean many things:
+#  1) I forgot to update this file
+#  2) The Bukkit name is the same as the Minecraft vanilla id
+#
+#
+# A few things to note: numbers and other special characters will be ignored and spaces will be replaced with underscores.
+#
+#
+#                          Have fun :D
+#
+
+
+
+PROTECTION_ENVIRONMENTAL: [protection]
+
+PROTECTION_FIRE: [fire protection]
+
+PROTECTION_FALL: [feather falling]
+
+PROTECTION_EXPLOSIONS: [blast protection]
+
+PROTECTION_PROJECTILE: [projectile protection]
+
+OXYGEN: [respiration]
+
+WATER_WORKER: [aqua affinity]
+
+BINDING_CURSE: [curse of binding]
+
+DAMAGE_ALL: [ sharpness]
+
+DAMAGE_UNDEAD: [smite]
+
+DAMAGE_ARTHROPODS: [bane of arthropods]
+
+LOOT_BONUS_MOBS: [looting]
+
+SWEEPING_EDGE: [sweeping]
+
+DIG_SPEED: [efficiency]
+
+DURABILITY: [unbreaking, durability]
+
+LOOT_BONUS_BLOCKS: [fortune]
+
+ARROW_DAMAGE: [power]
+
+ARROW_KNOCKBACK: [punch]
+
+ARROW_FIRE: [flame]
+
+ARROW_INFINITE: [infinity]
+
+LUCK: [luck of the sea]
+
+VANISHING_CURSE: [curse of vanishing]
+
+
+
