@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
-import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,11 +31,13 @@ public class AnvilListener implements Listener
 
   @EventHandler
   public void anvilEvent(PrepareAnvilEvent ev){
-    AnvilInventory inv = ev.getInventory();
+    Inventory inv = ev.getInventory();
 
     if(inv.getViewers().isEmpty()) return;
-    Player player = (Player)inv.getViewers().get(0);
-
+    Player player = (Player)inv.getViewers().get(0);//Get first viewer, usually player
+    if(!player.hasPermission(PermissionUtil.getFeatureAccess())){
+      return; //Skip if no permission
+    }
 
     ItemStack result = ev.getResult();
     if(!isValid(result)) return;
@@ -53,20 +55,15 @@ public class AnvilListener implements Listener
                                            ((EnchantmentStorageMeta) secondary.getItemMeta()).getStoredEnchants() :
                                            secondary.getEnchantments();
 
-    ItemMeta meta = result.getItemMeta();
-    ((Repairable)meta).setRepairCost(0);
-   ((Repairable)primary.getItemMeta()).setRepairCost(0);
-    ((Repairable)secondary.getItemMeta()).setRepairCost(0);
-    //inv.setRepairCost(0);
+    ItemMeta meta = resetCost(result);
+    resetCost(primary);
+    resetCost(secondary);
 
-    boolean canBypass = player.hasPermission(PermissionUtil.getServerBypass());
+    boolean canBypass = player.hasPermission(PermissionUtil.getLimitBypass());
 
     EnchantmentLimits playerLimits = plugin.getPlayerHandler().getLimits(player);
 
     Map<Enchantment,Integer> enchants = combineEnchants(enchant1,enchant2,canBypass,playerLimits);
-
-
-
 
     if(meta instanceof EnchantmentStorageMeta){
       EnchantmentStorageMeta emeta = (EnchantmentStorageMeta)meta;
@@ -145,5 +142,20 @@ public class AnvilListener implements Listener
     if(one <= 0 && two <= 0) return 0;
 
     return one == two ? one+1 : Math.max(one,two);
+  }
+
+  private static ItemMeta resetCost(ItemStack stack){
+    Preconditions.checkNotNull(stack,"Item cannot be null");
+    Preconditions.checkArgument(stack.hasItemMeta(),"Item does not have meta");
+
+    ItemMeta meta =  stack.getItemMeta();
+    if(!(meta instanceof Repairable)){
+      return meta;
+    }
+
+    ((Repairable)meta).setRepairCost(0);
+    stack.setItemMeta(meta);
+    return meta;
+
   }
 }

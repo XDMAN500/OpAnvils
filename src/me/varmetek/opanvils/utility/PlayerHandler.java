@@ -44,40 +44,48 @@ public class PlayerHandler implements Listener
 
   public EnchantmentLimits loadLimits(Player player){
 
-    EnchantmentLimits result = new EnchantmentLimits();
-    EnchantmentAliases aliases = plugin.getConfigManager().getEnchantmentAliases();
-    Set<PermissionAttachmentInfo> perms = player.getEffectivePermissions();
+    EnchantmentLimits result;
+    if(player.hasPermission(PermissionUtil.getAllEnchantments())){
+      result = EnchantmentLimits.NO_LIMIT;
 
-    for(PermissionAttachmentInfo perm: perms){
+    }else {
+      result = new EnchantmentLimits();
 
-      if(!perm.getValue()) continue;
-      if(!perm.getPermission().startsWith(root)) continue;
 
-      String node = perm.getPermission().toLowerCase().substring(root.length());
-      Matcher match =  permission.matcher(node);
-      if(!match.matches()) continue;
+      EnchantmentAliases aliases = plugin.getConfigManager().getEnchantmentAliases();
+      Set<PermissionAttachmentInfo> perms = player.getEffectivePermissions();
 
-      Enchantment ench = aliases.getEnchantment(match.group(1));
-      if(ench == null) continue;
+      for (PermissionAttachmentInfo perm : perms) {
 
-      if(match.group(2).equals("*")){
-        result.setLimitLess(ench);
-      }else{
-        Integer number = null;
-        try{
-          number =Integer.parseInt(match.group(2));
-        }catch (NumberFormatException ex){
+        if (!perm.getValue()) continue;
+        if (!perm.getPermission().startsWith(root)) continue;
+
+        String node = perm.getPermission().toLowerCase().substring(root.length());
+        Matcher match = permission.matcher(node);
+        if (!match.matches()) continue;
+
+        Enchantment ench = aliases.getEnchantment(match.group(1));
+        if (ench == null) continue;
+
+        if (match.group(2).equals("*")){
+          result.setLimitLess(ench);
+        } else {
+          Integer number = null;
+          try {
+            number = Integer.parseInt(match.group(2));
+          } catch (NumberFormatException ex) {
             //Ignore
-        }finally {
-         if(number == null){
-           continue;
-         }
+          } finally {
+            if (number == null){
+              continue;
+            }
+          }
+
+          result.setLimit(ench, number.intValue());
+
         }
 
-        result.setLimit(ench,number.intValue());
-
       }
-
     }
 
     playerEnchants.put(player,result);
@@ -87,11 +95,12 @@ public class PlayerHandler implements Listener
 
   public EnchantmentLimits getLimits(Player player){
 
-     if(player.hasPermission(PermissionUtil.getAllEnchantments())){
-      return  new EnchantmentLimits(EnchantmentLimits.LIMITLESS_REGISTRY);
+     if(player.hasPermission(PermissionUtil.getLimitBypass())){
+      return  EnchantmentLimits.NO_LIMIT;
     }else  if(plugin.getConfigManager().usingGlobalLimits()){
        return new EnchantmentLimits(plugin.getConfigManager().getGlobalLimits());
-     }else{
+     }else {
+
        EnchantmentLimits result = playerEnchants.get(player);
 
       if (result == null){

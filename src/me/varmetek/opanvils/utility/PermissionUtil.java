@@ -15,9 +15,10 @@ public final class PermissionUtil
 
 
   private static Permission allEnchantments;
-  private static Permission enchantmentBypass;
+  private static Permission limitBypass;
   private static Permission allPermissions;
   private static Permission adminPermission;
+  private static Permission featureAccess;
 
 
 
@@ -25,9 +26,10 @@ public final class PermissionUtil
 
     checkNotNull(server,"Server cannot be null");
     allEnchantments = getPerm(server,"opanvils.enchantment.*");
-    enchantmentBypass = getPerm(server,"opanvils.bypass");
+    limitBypass = getPerm(server,"opanvils.bypass");
     allPermissions = getPerm(server,"opanvils.*");
     adminPermission = getPerm(server,"opanvils.admin");
+    featureAccess = getPerm(server,"opanvils.use");
 
     for(String ench : config.getEnchantmentAliases().getAllAliases()){
       Permission perm = new Permission("opanvils.enchantment."+ench+".*");
@@ -54,14 +56,17 @@ public final class PermissionUtil
     return allPermissions;
   }
 
-  public static Permission getServerBypass(){
-    return enchantmentBypass;
+  public static Permission getLimitBypass(){
+    return limitBypass;
   }
 
   public static Permission getAdminPermission(){
     return adminPermission;
   }
 
+  public static Permission getFeatureAccess(){
+    return featureAccess;
+  }
 
 
   public static void dispose(){

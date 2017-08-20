@@ -5,19 +5,20 @@ description: A plugin which extends the abilities of anvils to allow players to 
 authors:
   - Varmetek
 commands:
+#  perms:
   opanvils:
     aliases: opa
 permissions:
   opanvils.*:
     description: Gives full access to all the features of the plugin
     children:
-      opanvils.use.*: true
+      opanvils.use: true
       opanvils.bypass: true
       opanvils.enchantment.*: true
       opanvils.admin: true
   opanvils.admin:
     description: Gives access to edit the config through UI and command
-  opanvils.use.*:
+  opanvils.use:
     description: Gives access to use the features of this plugin
   opanvils.enchantment.*:
     description: Gives access to combine all enchantments without limit

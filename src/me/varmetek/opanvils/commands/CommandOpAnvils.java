@@ -225,7 +225,7 @@ public class CommandOpAnvils implements CommandExecutor, TabCompleter
             return false;
           }
           boolean global = plugin.getConfigManager().usingGlobalLimits();
-          boolean bypass = player.hasPermission(PermissionUtil.getServerBypass());
+          boolean bypass = player.hasPermission(PermissionUtil.getLimitBypass());
 
           TextUtil.sendMessage(sender, String.format("&a Enchantment Limits of (&e&o%s)", player.getName()));
 

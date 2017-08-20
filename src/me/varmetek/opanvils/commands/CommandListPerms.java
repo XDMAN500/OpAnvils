@@ -8,6 +8,11 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.Set;
 
+/**
+ * A test command used to display all of the player's current permissions
+ *
+ * */
+
 public class CommandListPerms implements CommandExecutor
 {
 
