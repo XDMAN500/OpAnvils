@@ -142,6 +142,7 @@ public class PlayerHandler implements Listener
 
   public void clear(){
     for(Map.Entry<Player,EnchantmentLimits> entry: playerEnchants.entrySet()){
+      if(entry.getValue().isLimitLess()) return;
         entry.getValue().clear();
         playerEnchants.remove(entry.getKey());
     }
