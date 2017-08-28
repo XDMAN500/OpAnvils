@@ -122,6 +122,7 @@ public class PlayerHandler implements Listener
   @EventHandler
   public void leaveEvent(PlayerQuitEvent ev){
       EnchantmentLimits reg = playerEnchants.get(ev.getPlayer());
+    if(reg.isLimitLess())return;
       if(reg != null){
         reg.clear();
       }
@@ -132,6 +133,7 @@ public class PlayerHandler implements Listener
   @EventHandler
   public void kickEvent(PlayerKickEvent ev){
     EnchantmentLimits reg = playerEnchants.get(ev.getPlayer());
+    if(reg.isLimitLess())return;
     if(reg != null){
       reg.clear();
     }
