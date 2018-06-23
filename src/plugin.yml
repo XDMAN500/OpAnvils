@@ -1,6 +1,6 @@
 name: OpAnvils
 main: me.varmetek.opanvils.OpAnvilsPlugin
-version: 1.0.2
+version: 1.0.3
 description: A plugin which extends the abilities of anvils to allow players to create items with enchantments that have levels far further than before.
 authors:
   - Varmetek

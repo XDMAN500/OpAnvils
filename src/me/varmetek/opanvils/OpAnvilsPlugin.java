@@ -5,6 +5,7 @@ import me.varmetek.opanvils.listener.AnvilListener;
 import me.varmetek.opanvils.utility.ConfigManager;
 import me.varmetek.opanvils.utility.PermissionUtil;
 import me.varmetek.opanvils.utility.PlayerHandler;
+import me.varmetek.opanvils.utility.TextUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -74,5 +75,9 @@ public class OpAnvilsPlugin extends JavaPlugin
   }
 
 
+  public void  sendConsole(String... txt){
+    TextUtil.sendMessage(Bukkit.getConsoleSender(),txt );
+
+  }
 
 }

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
@@ -121,25 +120,13 @@ public class PlayerHandler implements Listener
 
   @EventHandler
   public void leaveEvent(PlayerQuitEvent ev){
-      EnchantmentLimits reg = playerEnchants.get(ev.getPlayer());
-    if(reg.isLimitLess())return;
-      if(reg != null){
-        reg.clear();
-      }
-
-      playerEnchants.remove(ev.getPlayer());
-  }
-
-  @EventHandler
-  public void kickEvent(PlayerKickEvent ev){
     EnchantmentLimits reg = playerEnchants.get(ev.getPlayer());
-    if(reg.isLimitLess())return;
-    if(reg != null){
-      reg.clear();
-    }
-
     playerEnchants.remove(ev.getPlayer());
+
+    if(reg == null || reg.isLimitLess())return;
+    reg.clear();
   }
+
 
 
   public void clear(){

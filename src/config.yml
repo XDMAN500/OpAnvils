@@ -5,7 +5,7 @@
 #                                             By Varmetek                                              #
 ########################################################################################################
 
-
+version: 0
 
 
 
@@ -27,14 +27,13 @@
 useGlobalLimits: true
 
 
-
-
 #The server custom enchantment limits
 # By default all of the enchantment limits are set to their vanilla limits
 # You can use the alternate names in aliases.yml here
 #
 # Values that are -1 or lower are set to default
 # Values that are set to 0 cannot be combined at all
+
 
 globalLimits:
 

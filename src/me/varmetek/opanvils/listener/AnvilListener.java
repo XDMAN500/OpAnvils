@@ -29,6 +29,8 @@ public class AnvilListener implements Listener
   }
 
 
+
+
   @EventHandler
   public void anvilEvent(PrepareAnvilEvent ev){
     Inventory inv = ev.getInventory();
@@ -40,11 +42,14 @@ public class AnvilListener implements Listener
     }
 
     ItemStack result = ev.getResult();
-    if(!isValid(result)) return;
+    if(!isValid(result))return;
     ItemStack primary = inv.getItem(0);
     if(!isValid(primary)) return;
     ItemStack secondary = inv.getItem(1);
     if(!isValid(secondary)) return;
+
+
+
 
 
     Map<Enchantment,Integer> enchant1 =  primary.getItemMeta() instanceof EnchantmentStorageMeta ?
@@ -83,8 +88,16 @@ public class AnvilListener implements Listener
 
       }
 
+
+
       for(Map.Entry<Enchantment,Integer> entry : enchants.entrySet()){
-        if(meta.hasConflictingEnchant(entry.getKey()) || !entry.getKey().getItemTarget().includes(result.getType())) continue;
+        if(!entry.getKey().getItemTarget().includes(result.getType())) continue;
+
+
+
+        if(meta.hasConflictingEnchant(entry.getKey()) ){
+           continue;
+        }
 
 
         meta.addEnchant(entry.getKey(), entry.getValue().intValue(), true);
@@ -94,6 +107,7 @@ public class AnvilListener implements Listener
     }
 
     result.setItemMeta(meta);
+    ev.setResult(result);
   }
 
 
@@ -123,7 +137,6 @@ public class AnvilListener implements Listener
       }
 
       if(result <=0) continue;
-    //  Bukkit.broadcastMessage( String.format("%1$s: %2$d (%3$d,%4$d)",ench.getName(),result,one,two));
 
       used.put(ench,result);
     }
