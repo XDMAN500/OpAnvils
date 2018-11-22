@@ -22,7 +22,7 @@ public class AnvilListener implements Listener
 {
   private OpAnvilsPlugin plugin;
 
-  private Set<Player> enhanced = new HashSet<>();
+ // private Set<Player> enhanced = new HashSet<>();
 
   public  AnvilListener(OpAnvilsPlugin plugin){
     this.plugin = plugin;
@@ -42,23 +42,22 @@ public class AnvilListener implements Listener
     }
 
     ItemStack result = ev.getResult();
-    if(!isValid(result))return;
+    if(!hasEnchantments(result))return; //Quick way to isolate only work with vanilla item combining
     ItemStack primary = inv.getItem(0);
-    if(!isValid(primary)) return;
     ItemStack secondary = inv.getItem(1);
-    if(!isValid(secondary)) return;
+    if(isAir(primary ) || isAir(secondary)) return; // Combine non enchanted item
+
+
+    if(!(hasEnchantments(primary) || hasEnchantments(secondary))) return;
 
 
 
 
 
-    Map<Enchantment,Integer> enchant1 =  primary.getItemMeta() instanceof EnchantmentStorageMeta ?
-                                           ((EnchantmentStorageMeta) primary.getItemMeta()).getStoredEnchants() :
-                                           primary.getEnchantments();
 
-    Map<Enchantment,Integer> enchant2 =  secondary.getItemMeta() instanceof EnchantmentStorageMeta ?
-                                           ((EnchantmentStorageMeta) secondary.getItemMeta()).getStoredEnchants() :
-                                           secondary.getEnchantments();
+    Map<Enchantment,Integer> enchant1 =  getEnchantments(primary);
+
+    Map<Enchantment,Integer> enchant2 =  getEnchantments(secondary);
 
     ItemMeta meta = resetCost(result);
     resetCost(primary);
@@ -83,22 +82,19 @@ public class AnvilListener implements Listener
       }
 
     }else{
+
+      //Remove old enchantments
       for(Enchantment ench: meta.getEnchants().keySet()){
         meta.removeEnchant(ench);
-
       }
 
 
-
+      //Add new enchantments
       for(Map.Entry<Enchantment,Integer> entry : enchants.entrySet()){
+
+        //Add only if fitting for item
         if(!entry.getKey().getItemTarget().includes(result.getType())) continue;
-
-
-
-        if(meta.hasConflictingEnchant(entry.getKey()) ){
-           continue;
-        }
-
+        if(meta.hasConflictingEnchant(entry.getKey()) ) continue;
 
         meta.addEnchant(entry.getKey(), entry.getValue().intValue(), true);
 
@@ -111,11 +107,50 @@ public class AnvilListener implements Listener
   }
 
 
-  private static boolean isValid(ItemStack item){
-    return item != null && item.getType() != Material.AIR && item.hasItemMeta() && item.getItemMeta().hasEnchants();
+
+  public static boolean isAir(ItemStack item){
+    return item == null || item.getType() == Material.AIR;
+  }
+
+  /**
+   * Determines whether this item can be used for custom enchanting
+   *
+   * Returns true if the item has enchantment
+   *
+   * **/
+  public static boolean hasEnchantments(ItemStack item) {
+    if (!isAir(item) && item.hasItemMeta()) {
+      ItemMeta meta = item.getItemMeta();
+      if (meta instanceof EnchantmentStorageMeta) {
+        return ((EnchantmentStorageMeta) meta).hasStoredEnchants();
+      } else return meta.hasEnchants();
+
+
+    }else return false;
+
   }
 
 
+  public static Map<Enchantment,Integer> getEnchantments(ItemStack item){
+    Preconditions.checkArgument(!isAir(item), "Air cannot have enchantments");
+
+    if (item.hasItemMeta()) {
+      ItemMeta meta = item.getItemMeta();
+      if (meta instanceof EnchantmentStorageMeta) {
+        return ((EnchantmentStorageMeta) meta).getStoredEnchants();
+      } else return meta.getEnchants();
+
+
+    }else return new HashMap<>();
+  }
+
+
+  /**
+   * Attempts to combine two separate enchantment data into one
+   *
+   * Returns the combined enchantments and levels
+   *
+   * **/
   public  static Map<Enchantment,Integer> combineEnchants(Map<Enchantment,Integer> itemOne, Map<Enchantment,Integer> itemTwo, boolean canBypass, EnchantmentLimits limits){
     Preconditions.checkNotNull(itemOne);
     Preconditions.checkNotNull(itemTwo);
@@ -145,29 +180,47 @@ public class AnvilListener implements Listener
   }
 
 
+  //Merges two integer numbers if both are non zero.
+  //
+  //Merging means that when the numbers are equal,
+  // the result is one greater than then the value of the first number.
+  // if the numbers are inequal, the largest number is returned.
+  //   if both numbers are 0, 0 is returned.
+  //
   private static int merge(Integer one,Integer two){
     int val1 = one == null ? 0 : one.intValue();
     int val2 = two == null? 0 : two.intValue();
     return merge(val1,val2);
   }
 
+  //Merges two integer numbers if both are non zero.
+  //
+  //Merging means that when the numbers are equal,
+  // the result is one greater than then the value of the first number.
+  // if the numbers are inequal, the largest number is returned.
+  //   if both numbers are 0, 0 is returned.
+  //
   private static int merge(int one,int two){
     if(one <= 0 && two <= 0) return 0;
 
     return one == two ? one+1 : Math.max(one,two);
   }
 
-  private static ItemMeta resetCost(ItemStack stack){
+  /**
+   * Resets the repair cost of an item to 0 to allow for infinite anvil use
+   * **/
+  public static ItemMeta resetCost(ItemStack stack){
     Preconditions.checkNotNull(stack,"Item cannot be null");
-    Preconditions.checkArgument(stack.hasItemMeta(),"Item does not have meta");
 
     ItemMeta meta =  stack.getItemMeta();
-    if(!(meta instanceof Repairable)){
-      return meta;
-    }
+    if(stack.hasItemMeta()) {
+      if (!(meta instanceof Repairable)) {
+        return meta;
+      }
 
-    ((Repairable)meta).setRepairCost(0);
-    stack.setItemMeta(meta);
+      ((Repairable) meta).setRepairCost(0);
+      stack.setItemMeta(meta);
+    }
     return meta;
 
   }

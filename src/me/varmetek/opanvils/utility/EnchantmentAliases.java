@@ -7,6 +7,10 @@ import org.bukkit.enchantments.Enchantment;
 import java.util.*;
 import java.util.regex.Pattern;
 
+
+/**
+ * Handles all the various names to attribute to an enchantment
+ * **/
 public class EnchantmentAliases
 {
   private static final ImmutableMap<String,Enchantment> EMPTY_MAP = ImmutableMap.of();
@@ -14,7 +18,10 @@ public class EnchantmentAliases
   private ImmutableMap<String,Enchantment>  flatMap = EMPTY_MAP;
 
 
-
+  /***
+   *
+   * Add aliases to an enchantment
+   * */
   public void addAliases(Enchantment ench,String...aliases){
     Preconditions.checkNotNull(ench,"Enchantment cannot be null");
     if(aliases.length == 0) return;
@@ -35,6 +42,10 @@ public class EnchantmentAliases
     names.put(ench,nameSet);
   }
 
+  /***
+   *
+   * Removes aliases from an enchantment
+   * */
   public void removeAliases(Enchantment ench,String...aliases){
     Preconditions.checkNotNull(ench,"Enchantment cannot be null");
     if(aliases.length == 0) return;
@@ -51,6 +62,11 @@ public class EnchantmentAliases
     names.put(ench,nameSet);
   }
 
+
+  /***
+   *
+   * Add aliases to an enchantment
+   * */
   public void addAliases(Enchantment ench, Collection<String> aliases){
     Preconditions.checkNotNull(ench,"Enchantment cannot be null");
     if(aliases.isEmpty()) return;
@@ -70,6 +86,11 @@ public class EnchantmentAliases
     names.put(ench,nameSet);
   }
 
+
+  /***
+   *
+   * Removes aliases from an enchantment
+   * */
   public void removeAliases(Enchantment ench,  Collection<String> aliases){
     Preconditions.checkNotNull(ench,"Enchantment cannot be null");
     if(aliases.isEmpty()) return;
@@ -88,6 +109,13 @@ public class EnchantmentAliases
   }
 
 
+  /***
+   * Attempts to get an enchantment by a name.
+   * First attempts to match the natural names and then the aliases.
+   *
+   * If no enchantment can be found, null is returned.
+   *
+   * */
   public Enchantment getEnchantment(String name){
     String fName = filterName(name);
     Enchantment enchant =  Enchantment.getByName(fName.toUpperCase());
@@ -101,13 +129,21 @@ public class EnchantmentAliases
   }
 
 
+  /***
+   *
+   * Returns all the aliases for a specific enchantment
+   * */
   public List<String> getAliases(Enchantment ench){
     Preconditions.checkNotNull(ench,"Enchantment cannot be null");
     List<String> result =  names.get(ench);
     return result == null? Collections.emptyList() :Collections.unmodifiableList(names.get(ench));
   }
 
-
+  /***
+   * Gets the first alias if it exists.
+   * If not, returns the enchantments natural name.
+   *
+   * */
   public String getPrimaryName(Enchantment ench){
     List<String> names = getAliases(ench);
     if(names == null || names.isEmpty()){
@@ -117,6 +153,10 @@ public class EnchantmentAliases
     }
   }
 
+
+  /**
+   * Clears all aliases for all enchantments
+   * **/
   public void clear(){
     names.clear();
     flatMap =EMPTY_MAP;
@@ -124,6 +164,11 @@ public class EnchantmentAliases
   }
 
 
+  /**
+   * Places all name aliases into a fast -direct
+   * string to enchantment map
+   *
+   * **/
   public void calculateAllNames(){
     Map<String,Enchantment> temp = new HashMap<>();
     for (Map.Entry<Enchantment,List<String>> aliases : names.entrySet()) {

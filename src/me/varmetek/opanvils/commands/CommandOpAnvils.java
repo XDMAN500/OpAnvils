@@ -311,14 +311,14 @@ public class CommandOpAnvils implements CommandExecutor, TabCompleter
         if(args.length == 2){
           List<String> options = new ArrayList<>(plugin.getConfigManager().getEnchantmentAliases().getAllAliases());
           options.add("-all");
-          return options;
+          return TabCompleteUtil.autoComplete(args[1],options);
         }
       }
       case "check":{
           if(args.length == 2 ){
           List<String> options = TabCompleteUtil.autoCompleteOnlinePlayer(args[1]);
           options.add("-global");
-          return options;
+          return TabCompleteUtil.autoComplete(args[1],options);
           }
       }
 
