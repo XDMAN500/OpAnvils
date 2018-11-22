@@ -34,13 +34,22 @@ public class PlayerHandler implements Listener
   }
 
 
-
+  /**
+   * Loads all information about the current online players
+   * */
   public void loadAllPlayers(){
     for(Player player: Bukkit.getOnlinePlayers()){
       loadLimits(player);
     }
   }
 
+  /**
+   * Loads the limits for the specific player
+   *
+   * @param player
+   * @return the enchantment limits given to the player
+   *
+   * **/
   public EnchantmentLimits loadLimits(Player player){
 
     EnchantmentLimits result;
@@ -92,6 +101,10 @@ public class PlayerHandler implements Listener
   }
 
 
+
+  /**
+   * Gets the limits currently on the given player
+   * */
   public EnchantmentLimits getLimits(Player player){
 
      if(player.hasPermission(PermissionUtil.getLimitBypass())){
@@ -120,7 +133,7 @@ public class PlayerHandler implements Listener
 
   @EventHandler
   public void leaveEvent(PlayerQuitEvent ev){
-    EnchantmentLimits reg = playerEnchants.get(ev.getPlayer());
+    EnchantmentLimits reg = playerEnchants.remove(ev.getPlayer());
     playerEnchants.remove(ev.getPlayer());
 
     if(reg == null || reg.isLimitLess())return;
